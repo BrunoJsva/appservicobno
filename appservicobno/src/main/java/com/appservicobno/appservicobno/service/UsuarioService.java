@@ -4,11 +4,11 @@ import java.time.Instant;
 
 import org.springframework.stereotype.Service;
 
-import com.appservicobno.appservicobno.Exception.EmailJaCadastradoException;
 import com.appservicobno.appservicobno.dto.CriarUsuarioDTO;
 import com.appservicobno.appservicobno.dto.LoginDTO;
 import com.appservicobno.appservicobno.dto.UsuarioDTO;
 import com.appservicobno.appservicobno.entity.Usuario;
+import com.appservicobno.appservicobno.exception.EmailJaCadastradoException;
 import com.appservicobno.appservicobno.repository.UsuarioRepositorio;
 
 /**
@@ -56,7 +56,7 @@ public class UsuarioService {
         }
 
         Usuario usuario = new Usuario(null, criarUsuarioDTO.nome(), criarUsuarioDTO.email(),
-                criarUsuarioDTO.senha(), Instant.now(), Instant.now());
+        		criarUsuarioDTO.senha(), Instant.now(), Instant.now(), criarUsuarioDTO.roles());
 
         usuarioRepositorio.save(usuario);
 

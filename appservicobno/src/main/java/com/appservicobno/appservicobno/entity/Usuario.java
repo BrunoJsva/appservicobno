@@ -34,19 +34,32 @@ public class Usuario {
 
 	@UpdateTimestamp
 	private Instant dataHoraAtualização;
+	
+	@Column(name = "roles", length = 100, nullable = false)
+	private String roles;
 
 	public Usuario() {
 	}
 
 	public Usuario(Long id, String nome, String email, String senha, Instant dataHoraCriação,
-			Instant dataHoraAtualização) {
+            Instant dataHoraAtualização, String roles) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.dataHoraCriação = dataHoraCriação;
 		this.dataHoraAtualização = dataHoraAtualização;
+		this.roles = roles;
 	}
+
+	public String getRoles() {
+		return roles;
+	}
+	
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
 	
 	public Long getId() {
 		return id;
