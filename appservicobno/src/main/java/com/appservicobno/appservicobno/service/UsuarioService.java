@@ -4,7 +4,9 @@ import java.time.Instant;
 
 import org.springframework.stereotype.Service;
 
+import com.appservicobno.appservicobno.Exception.EmailJaCadastradoException;
 import com.appservicobno.appservicobno.dto.CriarUsuarioDTO;
+import com.appservicobno.appservicobno.dto.LoginDTO;
 import com.appservicobno.appservicobno.dto.UsuarioDTO;
 import com.appservicobno.appservicobno.entity.Usuario;
 import com.appservicobno.appservicobno.repository.UsuarioRepositorio;
@@ -35,29 +37,45 @@ public class UsuarioService {
 
     /**
      * Cadastra um novo usuário no sistema.
-     * 
-     * <p>Este método cria um novo usuário com base nos dados fornecidos no objeto {@link CriarUsuarioDTO}.
-     * O ID do usuário é gerado aleatoriamente, e o usuário é salvo no banco de dados.</p>
-     * 
-     * @param criarUsuarioDTO O DTO que contém as informações do novo usuário.
+     *
+     * <p>Este método cria um novo usuário com base nos dados fornecidos em {@link CriarUsuarioDTO}.
+     * Antes do cadastro, é verificado se o e-mail já está registrado. Caso não esteja, o usuário
+     * é salvo no banco de dados com data de criação e atualização definidas como o momento atual.</p>
+     *
+     * @param criarUsuarioDTO O DTO que contém nome, e-mail e senha do novo usuário.
      * @return O ID do usuário recém-criado.
+     * @throws IllegalArgumentException se o e-mail informado já estiver cadastrado.
+     *
      * @author bruno.silva
-	 * @since 1.0
-	 * @created 29/04/2025
+     * @since 1.0
+     * @created 29/04/2025
      */
     public Long cadastrarUsuario(CriarUsuarioDTO criarUsuarioDTO) {
-        Usuario usuario = new Usuario(
-                null, 
-                criarUsuarioDTO.nome(), 
-                criarUsuarioDTO.email(), 
-                criarUsuarioDTO.senha(), 
-                Instant.now(), 
-                Instant.now());
+        if (verificarEmailJaCadastrado(criarUsuarioDTO.email())) {
+            throw new EmailJaCadastradoException("E-mail já cadastrado.");
+        }
+
+        Usuario usuario = new Usuario(null, criarUsuarioDTO.nome(), criarUsuarioDTO.email(),
+                criarUsuarioDTO.senha(), Instant.now(), Instant.now());
 
         usuarioRepositorio.save(usuario);
 
         return usuario.getId();
     }
+
+    
+    /**
+     * Verifica se um e-mail já está cadastrado no sistema.
+     *
+     * <p>Consulta o repositório de usuários para verificar se existe um usuário
+     * com o e-mail fornecido.</p>
+     *
+     * @param email O e-mail a ser verificado.
+     * @return {@code true} se o e-mail já estiver cadastrado, {@code false} caso contrário.
+     */
+	private boolean verificarEmailJaCadastrado(String email) {
+		return usuarioRepositorio.existsByEmail(email);
+	}
 
     /**
      * Consulta um usuário pelo seu ID.
@@ -113,4 +131,26 @@ public class UsuarioService {
 
         usuarioRepositorio.delete(usuarioConsultado);
     }
+    
+    /**
+     * Verifica as credenciais do usuário para realizar o login.
+     *
+     * <p>Este método consulta o repositório de usuários buscando pelo e-mail informado.
+     * Se o usuário for encontrado e a senha coincidir, retorna {@code true}. 
+     * Caso contrário, lança uma {@link IllegalArgumentException} informando que
+     * o e-mail ou senha são inválidos.</p>
+     *
+     * @param loginDTO Objeto contendo o e-mail e a senha do usuário.
+     * @return {@code true} se as credenciais forem válidas.
+     * @throws IllegalArgumentException se o e-mail não existir ou a senha estiver incorreta.
+     */
+    public boolean getLogin(LoginDTO loginDTO) {
+        Usuario usuario = usuarioRepositorio.findByEmail(loginDTO.getEmail());
+
+        if (usuario == null || !usuario.getSenha().equals(loginDTO.getSenha())) {
+            throw new IllegalArgumentException("E-mail ou senha inválidos.");
+        }
+        return true;
+    }
+
 }
