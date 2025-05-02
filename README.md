@@ -104,4 +104,4 @@ A aplicação estará disponível em:
 ## ✍️ Autor
 
 * **Bruno de Jesus Silva**
-* \[https://www.linkedin.com/in/bruno-silva-4746b7187/]
+* \https://www.linkedin.com/in/bruno-silva-4746b7187/
