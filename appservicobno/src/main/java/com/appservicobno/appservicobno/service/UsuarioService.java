@@ -94,4 +94,23 @@ public class UsuarioService {
     private UsuarioDTO converterUsuarioParaDTO(Usuario usuario) {
         return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha());
     }
+    
+    /**
+     * Deleta um usuário existente com base no ID fornecido.
+     *
+     * @param usuarioId o ID do usuário a ser deletado
+     * @throws NumberFormatException se o usuário com o ID fornecido não for encontrado
+     * @author bruno.silva
+	 * @since 1.0
+	 * @created 02/05/2025
+     */
+    public void deletarUsuario(long usuarioId) {
+        Usuario usuarioConsultado = usuarioRepositorio.findById(usuarioId).orElse(null);
+
+        if (usuarioConsultado == null) {
+            throw new NumberFormatException("Usuário não encontrado.");
+        }
+
+        usuarioRepositorio.delete(usuarioConsultado);
+    }
 }

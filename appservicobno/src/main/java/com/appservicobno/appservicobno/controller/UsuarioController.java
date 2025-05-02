@@ -1,6 +1,7 @@
 package com.appservicobno.appservicobno.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,24 @@ public class UsuarioController {
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest()
                 .body("Não foi possível consultar o usuário, verifique o ID informado.");
+        }
+    }
+    
+    /**
+     * Endpoint responsável por deletar um usuário com base no ID informado.
+     *
+     * @param usuarioId ID do usuário que será deletado.
+     * @return {@code 200 OK} se o usuário for deletado com sucesso,
+     *         ou {@code 400 Bad Request} caso o ID seja inválido ou o usuário não seja encontrado.
+     */
+    @DeleteMapping("/{usuarioId}")
+    public ResponseEntity<?> deletarUsuario(@PathVariable long usuarioId) {
+        try {
+            service.deletarUsuario(usuarioId);
+            return ResponseEntity.ok("Usuário deletado com sucesso.");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest()
+                .body("Não foi possível deletar o usuário, verifique o ID informado.");
         }
     }
 }
