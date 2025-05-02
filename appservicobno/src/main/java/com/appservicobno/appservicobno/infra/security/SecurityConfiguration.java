@@ -11,10 +11,32 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Configuração de segurança da aplicação.
+ * <p>
+ * Nesta configuração, todos os endpoints são liberados (permitAll),
+ * CSRF está desabilitado e o gerenciamento de sessão é stateless.
+ * </p>
+ * 
+ * @since 1.0
+ * @author bruno.silva
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    /**
+     * Define a cadeia de filtros de segurança (SecurityFilterChain).
+     * <p>
+     * - Desabilita CSRF.<br>
+     * - Define a política de sessão como {@code STATELESS}.<br>
+     * - Libera acesso a todos os endpoints via {@code permitAll()}.
+     * </p>
+     * 
+     * @param http o builder para configuração de requisições HTTP
+     * @return o objeto {@link SecurityFilterChain} configurado
+     * @throws Exception caso ocorra erro na configuração
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
