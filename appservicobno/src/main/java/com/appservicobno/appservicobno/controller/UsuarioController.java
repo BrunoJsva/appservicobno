@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appservicobno.appservicobno.dto.CriarUsuarioDTO;
-import com.appservicobno.appservicobno.dto.LoginDTO;
 import com.appservicobno.appservicobno.dto.UsuarioDTO;
 import com.appservicobno.appservicobno.service.UsuarioService;
 
@@ -82,31 +81,6 @@ public class UsuarioController {
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest()
                 .body("Não foi possível deletar o usuário, verifique o ID informado.");
-        }
-    }
-    
-    /**
-     * Endpoint responsável por autenticar um usuário com base nas credenciais fornecidas.
-     *
-     * <p>Este método recebe um objeto {@link LoginDTO} contendo o e-mail e a senha do usuário.
-     * Ele delega a verificação para o {@code UsuarioService}. Se as credenciais forem válidas,
-     * retorna uma resposta 200 OK com valor {@code true}. Caso contrário, retorna um erro 400
-     * com uma mensagem indicando falha na autenticação.</p>
-     *
-     * @param loginDTO Objeto contendo as credenciais de login do usuário (e-mail e senha).
-     * @return {@code ResponseEntity} com o resultado da autenticação.
-     * @author bruno.silva
-     * @created 29/04/2025
-     */
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-    	
-    	try {
-    		boolean usuarioValido = service.getLogin(loginDTO);
-            return ResponseEntity.ok(usuarioValido);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest()
-                .body("Não foi possível realizar o login, verifique as credenciais.");
         }
     }
 }
