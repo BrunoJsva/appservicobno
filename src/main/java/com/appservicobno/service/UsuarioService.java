@@ -60,7 +60,7 @@ public class UsuarioService {
 
         usuarioRepositorio.save(usuario);
 
-        return usuario.id();
+        return usuario.getId();
     }
 
     
@@ -110,7 +110,7 @@ public class UsuarioService {
 	 * @created 02/05/2025
      */
     private UsuarioDTO converterUsuarioParaDTO(UsuarioEntity usuario) {
-        return new UsuarioDTO(usuario.id(), usuario.nome(), usuario.email(), usuario.senha());
+        return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha());
     }
     
     /**
@@ -147,7 +147,7 @@ public class UsuarioService {
     public boolean getLogin(LoginDTO loginDTO) {
         UsuarioEntity usuario = usuarioRepositorio.findByEmail(loginDTO.email());
 
-        if (usuario == null || !usuario.senha().equals(loginDTO.senha())) {
+        if (usuario == null || !usuario.getSenha().equals(loginDTO.senha())) {
             throw new IllegalArgumentException("E-mail ou senha inválidos.");
         }
         return true;

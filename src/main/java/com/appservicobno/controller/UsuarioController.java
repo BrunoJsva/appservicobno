@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
-@RequestMapping("/v1/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     
     private final UsuarioService service;
@@ -42,7 +42,7 @@ public class UsuarioController {
      * @created 29/04/2025
      */
     @Operation(summary = "Cadastra um novo usuário", description = "Cria um novo usuário no sistema com os dados fornecidos.")
-    @PostMapping
+    @PostMapping("cadastrarUsuario")
     public ResponseEntity<String> cadastrar(@RequestBody CriarUsuarioDTO criarUsuarioDTO) {
         Long usuarioId = service.cadastrarUsuario(criarUsuarioDTO);
         String mensagem = "Usuário criado com sucesso. ID: " + usuarioId;
@@ -60,9 +60,9 @@ public class UsuarioController {
      * @created 29/04/2025
      */
     @Operation(summary = "Consulta usuário pelo ID", description = "Retorna os dados do usuário correspondente ao ID fornecido.")
-    @GetMapping("/{usuarioId}")
+    @GetMapping("/consultarPeloId")
     public ResponseEntity<?> consultarPeloId(@PathVariable long usuarioId) {
-        try {
+        try {   
             UsuarioDTO usuarioConsultado = service.consultarUsuarioPorId(usuarioId);
             return ResponseEntity.ok(usuarioConsultado);
         } catch (NumberFormatException e) {
@@ -80,7 +80,7 @@ public class UsuarioController {
      * @created 29/04/2025
      */
     @Operation(summary = "Deleta usuário pelo ID", description = "Remove o usuário correspondente ao ID fornecido do sistema.")
-    @DeleteMapping("/{usuarioId}")
+    @DeleteMapping("/deletarUsuario")
     public ResponseEntity<?> deletarUsuario(@PathVariable long usuarioId) {
         try {
             service.deletarUsuario(usuarioId);
