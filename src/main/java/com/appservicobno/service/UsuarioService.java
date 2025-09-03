@@ -1,15 +1,15 @@
-package com.appservicobno.appservicobno.service;
+package com.appservicobno.service;
 
 import java.time.Instant;
 
 import org.springframework.stereotype.Service;
 
-import com.appservicobno.appservicobno.Exception.EmailJaCadastradoException;
-import com.appservicobno.appservicobno.dto.CriarUsuarioDTO;
-import com.appservicobno.appservicobno.dto.LoginDTO;
-import com.appservicobno.appservicobno.dto.UsuarioDTO;
-import com.appservicobno.appservicobno.entity.Usuario;
-import com.appservicobno.appservicobno.repository.UsuarioRepositorio;
+import com.appservicobno.Exception.EmailJaCadastradoException;
+import com.appservicobno.dto.CriarUsuarioDTO;
+import com.appservicobno.dto.LoginDTO;
+import com.appservicobno.dto.UsuarioDTO;
+import com.appservicobno.entity.UsuarioEntity;
+import com.appservicobno.repository.UsuarioRepository;
 
 /**
  * Serviço responsável pela lógica de negócios relacionada aos usuários.
@@ -24,14 +24,14 @@ import com.appservicobno.appservicobno.repository.UsuarioRepositorio;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepository usuarioRepositorio;
 
     /**
      * Construtor que inicializa o serviço com o repositório de usuários.
      * 
      * @param usuarioRepositorio O repositório de usuários usado para operações CRUD.
      */
-    public UsuarioService(UsuarioRepositorio usuarioRepositorio) {
+    public UsuarioService(UsuarioRepository usuarioRepositorio) {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
@@ -55,12 +55,12 @@ public class UsuarioService {
             throw new EmailJaCadastradoException("E-mail já cadastrado.");
         }
 
-        Usuario usuario = new Usuario(null, criarUsuarioDTO.nome(), criarUsuarioDTO.email(),
+        UsuarioEntity usuario = new UsuarioEntity(null, criarUsuarioDTO.nome(), criarUsuarioDTO.email(),
                 criarUsuarioDTO.senha(), Instant.now(), Instant.now());
 
         usuarioRepositorio.save(usuario);
 
-        return usuario.getId();
+        return usuario.id();
     }
 
     
@@ -91,7 +91,7 @@ public class UsuarioService {
 	 * @created 29/04/2025
      */
     public UsuarioDTO consultarUsuarioPorId(long usuarioId) {
-        Usuario usuarioConsultado = usuarioRepositorio.findById(usuarioId).orElse(null);
+        UsuarioEntity usuarioConsultado = usuarioRepositorio.findById(usuarioId).orElse(null);
 
         if (usuarioConsultado == null) {
             throw new NumberFormatException("Usuário não encontrado.");
@@ -101,7 +101,7 @@ public class UsuarioService {
     }
 
     /**
-     * Converte um {@link Usuario} para um {@link UsuarioDTO}.
+     * Converte um {@link UsuarioEntity} para um {@link UsuarioDTO}.
      * 
      * @param usuario O usuário a ser convertido.
      * @return O DTO correspondente ao usuário.
@@ -109,8 +109,8 @@ public class UsuarioService {
 	 * @since 1.0
 	 * @created 02/05/2025
      */
-    private UsuarioDTO converterUsuarioParaDTO(Usuario usuario) {
-        return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha());
+    private UsuarioDTO converterUsuarioParaDTO(UsuarioEntity usuario) {
+        return new UsuarioDTO(usuario.id(), usuario.nome(), usuario.email(), usuario.senha());
     }
     
     /**
@@ -123,7 +123,7 @@ public class UsuarioService {
 	 * @created 02/05/2025
      */
     public void deletarUsuario(long usuarioId) {
-        Usuario usuarioConsultado = usuarioRepositorio.findById(usuarioId).orElse(null);
+        UsuarioEntity usuarioConsultado = usuarioRepositorio.findById(usuarioId).orElse(null);
 
         if (usuarioConsultado == null) {
             throw new NumberFormatException("Usuário não encontrado.");
@@ -145,9 +145,9 @@ public class UsuarioService {
      * @throws IllegalArgumentException se o e-mail não existir ou a senha estiver incorreta.
      */
     public boolean getLogin(LoginDTO loginDTO) {
-        Usuario usuario = usuarioRepositorio.findByEmail(loginDTO.getEmail());
+        UsuarioEntity usuario = usuarioRepositorio.findByEmail(loginDTO.email());
 
-        if (usuario == null || !usuario.getSenha().equals(loginDTO.getSenha())) {
+        if (usuario == null || !usuario.senha().equals(loginDTO.senha())) {
             throw new IllegalArgumentException("E-mail ou senha inválidos.");
         }
         return true;

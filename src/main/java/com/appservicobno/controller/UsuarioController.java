@@ -1,4 +1,4 @@
-package com.appservicobno.appservicobno.controller;
+package com.appservicobno.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,16 +9,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appservicobno.appservicobno.dto.CriarUsuarioDTO;
-import com.appservicobno.appservicobno.dto.LoginDTO;
-import com.appservicobno.appservicobno.dto.UsuarioDTO;
-import com.appservicobno.appservicobno.service.UsuarioService;
+import com.appservicobno.dto.CriarUsuarioDTO;
+import com.appservicobno.dto.LoginDTO;
+import com.appservicobno.dto.UsuarioDTO;
+import com.appservicobno.service.UsuarioService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controller responsável pelos endpoints relacionados a usuários.
  * @author bruno.silva
  * @created 29/04/2025
  */
+@Tag(name = "Usuários", description = "Gerenciamento de usuários")
 @RestController
 @RequestMapping("/v1/usuarios")
 public class UsuarioController {
@@ -37,6 +41,7 @@ public class UsuarioController {
      * @author bruno.silva
      * @created 29/04/2025
      */
+    @Operation(summary = "Cadastra um novo usuário", description = "Cria um novo usuário no sistema com os dados fornecidos.")
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody CriarUsuarioDTO criarUsuarioDTO) {
         Long usuarioId = service.cadastrarUsuario(criarUsuarioDTO);
@@ -54,6 +59,7 @@ public class UsuarioController {
      * @author bruno.silva
      * @created 29/04/2025
      */
+    @Operation(summary = "Consulta usuário pelo ID", description = "Retorna os dados do usuário correspondente ao ID fornecido.")
     @GetMapping("/{usuarioId}")
     public ResponseEntity<?> consultarPeloId(@PathVariable long usuarioId) {
         try {
@@ -71,9 +77,9 @@ public class UsuarioController {
      * @param usuarioId ID do usuário que será deletado.
      * @return {@code 200 OK} se o usuário for deletado com sucesso,
      *         ou {@code 400 Bad Request} caso o ID seja inválido ou o usuário não seja encontrado.
-     * @author bruno.silva
      * @created 29/04/2025
      */
+    @Operation(summary = "Deleta usuário pelo ID", description = "Remove o usuário correspondente ao ID fornecido do sistema.")
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<?> deletarUsuario(@PathVariable long usuarioId) {
         try {
@@ -95,9 +101,9 @@ public class UsuarioController {
      *
      * @param loginDTO Objeto contendo as credenciais de login do usuário (e-mail e senha).
      * @return {@code ResponseEntity} com o resultado da autenticação.
-     * @author bruno.silva
      * @created 29/04/2025
      */
+    @Operation(summary = "Autentica usuário", description = "Realiza a autenticação do usuário com base nas credenciais fornecidas.")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
     	

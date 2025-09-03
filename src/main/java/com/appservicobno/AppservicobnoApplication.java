@@ -1,4 +1,4 @@
-package com.appservicobno.appservicobno;
+package com.appservicobno;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class AppservicobnoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AppservicobnoApplication.class, args);
 	}
-
 }

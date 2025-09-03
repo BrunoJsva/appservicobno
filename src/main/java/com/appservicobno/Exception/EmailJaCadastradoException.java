@@ -1,4 +1,4 @@
-package com.appservicobno.appservicobno.Exception;
+package com.appservicobno.Exception;
 
 public class EmailJaCadastradoException extends RuntimeException {
 
